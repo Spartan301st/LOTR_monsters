@@ -2,6 +2,8 @@
 import "./App.css";
 
 import { Component } from "react";
+import Cardlist from "./components/card-list/card-list.component";
+import SearchBox from "./components/search-box/search-box.component";
 
 class App extends Component {
   constructor() {
@@ -10,40 +12,14 @@ class App extends Component {
 
     this.state = {
       monsters: [],
-      // monsters: [
-      //   {
-      //     name: "Ungolia"
-      //   },
-      //   {
-      //     name: "Glaurung"
-      //   },
-      //   {
-      //     name: "Ancalagon"
-      //   },
-      //   {
-      //     name: "Scatha"
-      //   },
-      //   {
-      //     name: "Smaug"
-      //   },
-      // ],
-
-      // monster1: {
-      //   name: "Ungolia"
-      // },
-      // monster2: {
-      //   name: "Glaurung"
-      // },
-      // monster3: {
-      //   name: "Ancalagon"
-      // },
+      // to be updated each time a new thing is typed for keeping track
+      searchField: "",
     };
-    console.log(`1`);
   }
 
   // codes within will be executed once the component gets added to the DOM
   async componentDidMount() {
-    console.log(`3`);
+    // get all monsters from the api
     let res = await fetch(
       "https://the-one-api.dev/v2/character?limit=10&race!=Human,Hobbit,Elf,Dwarf,Elves,Maiar,Eagles,Ainur",
       {
@@ -56,68 +32,53 @@ class App extends Component {
       }
     ).then((res) => res.json());
 
+    // save the list of monsters in the state
     this.setState(() => {
       return { monsters: res.docs };
     });
-    console.log(this.state);
   }
 
+  onSearchChange = (event) => {
+    const searchField = event.target.value.toLowerCase();
+    // updating the state to reflect the search on the rendered names
+    this.setState(() => {
+      return { searchField };
+    });
+  };
+
   render() {
-    console.log(`2`);
+    // destructuring only the necessary stuff
+    const { monsters, searchField } = this.state;
+    const { onSearchChange } = this;
+    // check if the current monsters array contains the event target value among monsters names
+    const filteredMonsters = monsters.filter((monster) =>
+      // on each change iterate over the state monster array and check if the given name contains the text typed in the input field
+      monster.name.toLowerCase().includes(searchField)
+    );
     return (
       <div className="App">
-        {/* <h2>{this.state.monster1.name}</h2>
-        <h2>{this.state.monster2.name}</h2>
-        <h2>{this.state.monster3.name}</h2> */}
-        {this.state.monsters.map((monster, i) => (
-          <h2 key={i}>{monster.name}</h2>
-        ))}
+        <h1 className="app-title">Lotr monsters as their Robot shapes.</h1>
+        {/* <input
+          className="search-box"
+          type="search"
+          placeholder="Search a monster"
+          onChange={onSearchChange}
+        /> */}
+        <SearchBox
+          onChangeHandler={onSearchChange}
+          placeholder="Search for a monster"
+          className="monsters-search-box"
+        />
+        {/* loop through all potential monster matches and show their names */}
+        {/* {filteredMonsters.map((monster, i) => (
+          <div key={monster.id}>
+            <h2>{monster.name}</h2>
+          </div>
+        ))} */}
+        <Cardlist monsters={filteredMonsters} />
       </div>
     );
   }
 }
-
-//  { <h1>
-//           Hello {this.state.character}! Welcome to {this.state.school}
-//         </h1> }
-// <h1>
-//   Hello {this.state.character.fname} {this.state.character.lname}!
-//   Welcome to {this.state.school}
-// </h1>
-// <button
-//   onClick={() =>
-//     this.setState(
-//       () => {
-//         return {
-//           character: { fname: "Hermione", lname: "Granger" },
-//         };
-//       },
-//       () => {
-//         console.log(this.state);
-//       }
-//     )
-//   }
-// >
-//   Modify character
-// </button>
-// { <button
-//   onClick={() =>
-//     this.setState({
-//       character: { fname: "Hermione", lname: "Granger" },
-//     })
-//   }
-// >
-//   Modify character
-// </button> }
-// { <button onClick={() => this.setState({ character: "Hermione" })}>
-//   Modify character
-// </button> }
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1>Hello</h1>
-//     </div>
-//   );
-// }
 
 export default App;
