@@ -58,23 +58,11 @@ class App extends Component {
     return (
       <div className="App">
         <h1 className="app-title">Lotr monsters as their Robot shapes.</h1>
-        {/* <input
-          className="search-box"
-          type="search"
-          placeholder="Search a monster"
-          onChange={onSearchChange}
-        /> */}
         <SearchBox
           onChangeHandler={onSearchChange}
           placeholder="Search for a monster"
           className="monsters-search-box"
         />
-        {/* loop through all potential monster matches and show their names */}
-        {/* {filteredMonsters.map((monster, i) => (
-          <div key={monster.id}>
-            <h2>{monster.name}</h2>
-          </div>
-        ))} */}
         <Cardlist monsters={filteredMonsters} />
       </div>
     );

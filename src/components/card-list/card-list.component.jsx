@@ -8,18 +8,6 @@ class CardList extends Component {
         return (
           <div className="card-list">
             {monsters.map((monster, i) => {
-              // const {name, id} = monster;
-              // return(
-              //   <div key={i} className="card-container">
-              //     <img 
-              //       src={`https://avatars.dicebear.com/api/bottts/${i}.svg?r=50&&scale=80&colorful=1&size=180`} 
-              //       alt={`monster ${name}`} 
-              //     />
-              //     <h2 key={i}>{name}</h2>
-              //     {/* {console.log(monster)} */}
-              //   </div>
-              // )
-              // console.log(monster._id)
               return (
                 <Card monster={monster} i={i}/>
               )
